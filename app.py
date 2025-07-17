@@ -1,47 +1,47 @@
-import streamlit as st
-
-st.title("はじめてのStreamlitアプリ")
-st.write("こんにちは、Streamlitの世界へようこそ！")
-
-# 入力フォーム
-name = st.text_input("あなたの名前を入力してください")
-if name:
-    st.write(f"{name}さん、ようこそ！")
-
-# グラフを書いてみる
-import pandas as pd
-import matplotlib.pyplot as plt
-
-df = pd.DataFrame({
-    '年': [2020, 2021, 2022, 2023],
-    '売上': [100, 130, 160, 190]
-})
-st.line_chart(df.set_index('年'))
-
-# csv ファイルをアップロード
-uploaded_file = st.file_uploader("CSVファイルをアップロード")
-if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file)
-    st.write(df)
-
-# 文字の大きさを変えてみる
-import streamlit as st
-
-st.markdown("# これはタイトルサイズの文字（H1）")
-st.markdown("## これはサブタイトルサイズ（H2）")
-st.markdown("### これは中見出しサイズ（H3）")
 
 import streamlit as st
 
-# import streamlit as st
+st.title("サンプルアプリ②: 少し複雑なWebアプリ")
 
-# 「st.markdown("")」はタイトルサイズの文字（H1）を表示する簡易関数
-# 「st.markdown("")」はMarkdown形式で柔軟な表現が可能（文字サイズ・太字・色など）
+st.write("##### 動作モード1: 文字数カウント")
+st.write("入力フォームにテキストを入力し、「実行」ボタンを押すことで文字数をカウントできます。")
+st.write("##### 動作モード2: BMI値の計算")
+st.write("身長と体重を入力することで、肥満度を表す体型指数のBMI値を算出できます。")
 
-st.markdown("<h1 style='color:red;'>赤いタイトル</h1>", unsafe_allow_html=True)
+selected_item = st.radio(
+    "動作モードを選択してください。",
+    ["文字数カウント", "BMI値の計算"]
+)
 
-st.markdown("<h1 style='color:blue;'>青いタイトル</h1>", unsafe_allow_html=True)
+st.divider()
 
-st.markdown("<h1 style='color:green;'>緑のタイトル</h1>", unsafe_allow_html=True)
+if selected_item == "文字数カウント":
+    input_message = st.text_input(label="文字数のカウント対象となるテキストを入力してください。")
+    text_count = len(input_message)
 
+else:
+    height = st.text_input(label="身長（cm）を入力してください。")
+    weight = st.text_input(label="体重（kg）を入力してください。")
 
+if st.button("実行"):
+    st.divider()
+
+    if selected_item == "文字数カウント":
+        if input_message:
+            st.write(f"文字数: **{text_count}**")
+
+        else:
+            st.error("カウント対象となるテキストを入力してから「実行」ボタンを押してください。")
+
+    else:
+        if height and weight:
+            try:
+                bmi = round(int(weight) / ((int(height)/100) ** 2), 1)
+                st.write(f"BMI値: {bmi}")
+
+            except ValueError as e:
+                st.error("身長と体重は数値で入力してください。")
+
+        else:
+            st.error("身長と体重をどちらも入力してください。")
+            
